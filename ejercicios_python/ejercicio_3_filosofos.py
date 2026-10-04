@@ -66,8 +66,25 @@ def filosofo(id, rondas=3):
         # PISTA: Implementa la solución asimétrica de Dijkstra (romper Espera Circular)
         # o utiliza un semáforo árbitro para evitar el interbloqueo (Deadlock).
         #
+        if id == NUM_FILOSOFOS - 1:
+            # El último filósofo rompe la regla: toma primero el DERECHO, luego el IZQUIERDO
+            primer_tenedor = tenedor_der
+            segundo_tenedor = tenedor_izq
+        else:
+            # Los demás filósofos toman primero el IZQUIERDO, luego el DERECHO
+            primer_tenedor = tenedor_izq
+            segundo_tenedor = tenedor_der
+            
+        # Adquirir los tenedores en el orden establecido
+        tenedores[primer_tenedor].acquire()
+        tenedores[segundo_tenedor].acquire()
+        
+        # Comer
+        comer(id)
         # TODO: Adquiere los tenedores adyacentes de forma segura, invoca comer(id)
         # y libera los tenedores:
+        tenedores[segundo_tenedor].release()
+        tenedores[primer_tenedor].release()
         pass
         # =========================================================================
         # FIN TODO
